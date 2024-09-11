@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Vanilla JavaScript App</title>
+</head>
+
+<body>
+  <main>
+    <h1>Vanilla JavaScript App</h1>
+    <p>Loading content from the API: <b id="name">...</b></p>
+  </main>
+
+  <script>
+    (async function () {
+      // Extract 'name' from the query string
+      const urlParams = new URLSearchParams(window.location.search);
+      const name = urlParams.get('name') || 'Guest'; // Default to 'Guest' if no name is provided
+
+      // Fetch data from the API, including the name in the query string
+      const body = await (await fetch(`/api/message?name=${name}`)).json();
+      console.log(body);
+
+      // Update the DOM with the response
+      document.querySelector('#name').textContent = body;
+    }());
+  </script>
+
+</body>
+
+</html>
+
+
+<!-- 
+
+
+JavaScript Explanation:
+The script is enclosed in an Immediately Invoked Function Expression (IIFE): (async function() { ... }());. 
+This means the function runs automatically as soon as it’s defined, without needing to be called manually.
+
+Extracting the name from the query string:
+
+const urlParams = new URLSearchParams(window.location.search);:
+This creates a URLSearchParams object, which allows you to extract query string parameters from the current page URL.
+
+window.location.search gets the part of the URL after the ?, which contains the query string.
+const name = urlParams.get('name') || 'Guest';:
+This checks if there is a name parameter in the query string (e.g., ?name=John). If found, it assigns that value to the name variable.
+If no name is provided, it defaults to "Guest".
+
+Fetching data from the API:
+const body = await (await fetch(/api/message?name=${name})).json();:
+This sends a GET request to the API endpoint /api/message with the name parameter in the query string (e.g., /api/message?name=John).
+The API returns a JSON response, which is parsed and stored in the body variable.
+console.log(body);: This logs the API response to the browser's console for debugging purposes.
+
+Updating the DOM:
+document.querySelector('#name').textContent = body;:
+This selects the <b> element with the id="name" and updates its text content with the value received from the API (stored in body).
+This replaces the initial "..." with the API response.
+
+Example Flow:
+If you visit the page with the URL https://blue-river-03d6d751e.5.azurestaticapps.net/?name=John, the name parameter will be set to "John".
+
+The script fetches data from the API: /api/message?name=John. If the API responds with a message like "Hello, John. This HTTP triggered function executed successfully.", the text inside the <b id="name"> tag will be updated to display that message.
+
+If no name parameter is present in the URL (e.g., https://blue-river-03d6d751e.5.azurestaticapps.net/), the name will default to "Guest", and the request will go to /api/message?name=Guest.
+
+Previous version of the Code:
+The previous JavaScript code (which is now commented out) was making a simpler API call without passing a name parameter in the query string. It has been replaced by the updated version that dynamically reads the name from the URL and includes it in the API request.
+
+-->
